@@ -1,0 +1,59 @@
+{
+  "name": "budgety",
+  "description": "A budget management and personal finance application.",
+  "version": "1.0.1",
+  "author": "biofractal",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/biofractal/budgety",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/biofractal/budgety"
+  },
+  "main": "index.js",
+  "scripts": {
+    "babel": "babel --presets latest,stage-2 src --out-dir lib",
+    "build": "npm run lint && npm run babel",
+    "start": "webpack-dev-server"
+  },
+  "dependencies": {
+    "@gp-technical/stack-redux-app": "^0.3.4",
+    "@gp-technical/stack-redux-components": "0.0.8",
+    "material-ui": "^0.16.1",
+    "moment": "^2.15.1",
+    "presenter": "^0.2.0",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-json-table": "^0.1.1",
+    "react-loader-advanced": "^1.4.1",
+    "react-redux": "^4.4.5",
+    "react-tap-event-plugin": "^1.0.0",
+    "redux": "^3.5.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-core": "^6.16.0",
+    "babel-eslint": "^7.0.0",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-react-require": "^2.1.0",
+    "babel-polyfill": "^6.16.0",
+    "babel-preset-latest": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-react-hmre": "^1.1.1",
+    "babel-preset-stage-2": "^6.16.0",
+    "css-loader": "^0.25.0",
+    "eslint": "^3.6.1",
+    "eslint-config-standard": "^6.2.0",
+    "eslint-loader": "^1.5.0",
+    "eslint-plugin-promise": "^2.0.1",
+    "eslint-plugin-react": "^6.3.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "html-webpack-plugin": "^2.17.0",
+    "npm-install-webpack-plugin": "^4.0.3",
+    "open-browser-webpack-plugin": "0.0.2",
+    "style-loader": "^0.13.1",
+    "webpack": "^2.1.0-beta.25",
+    "webpack-dev-server": "^2.1.0-beta.7",
+    "webpack-merge": "^0.14.1",
+    "webpack-validator": "^2.2.8"
+  }
+}
