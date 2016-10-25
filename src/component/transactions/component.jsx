@@ -2,23 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { style } from './style'
 import { actionHub, services } from '../../loader'
-import { helpers } from '@gp-technical/stack-redux-components'
-
-const makeStandard = (transactions) => {
-  const standardKeys = ['Date', 'Description', 'Amount', 'Balance']
-  for (let key in transactions) {
-    if (!standardKeys.includes(key)) {
-      console.info('key', key)
-    }
-  }
-  return transactions
-}
+import * as db from './db'
 
 class container extends React.Component {
 
   onFileSelected = async e => {
-    const transactions = makeStandard(await helpers.csvParse(e.target.files[0]))
-    this.props.add(transactions)
+    db.save(e.target.files[0])
+    this.props.add(db.select())
   }
 
   render () {
