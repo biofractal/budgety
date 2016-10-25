@@ -6,7 +6,7 @@ import * as db from './db'
 
 class container extends React.Component {
 
-  onFileSelected = async e => {
+  onFileSelected = e => {
     db.save(e.target.files[0])
     this.props.add(db.select())
   }
