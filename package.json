@@ -19,7 +19,7 @@
     "@gp-technical/stack-redux-app": "^0.3.4",
     "@gp-technical/stack-redux-components": "0.0.8",
     "material-ui": "^0.16.1",
-    "moment": "^2.15.1",
+    "moment": "^2.15.2",
     "presenter": "^0.2.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",

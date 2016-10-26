@@ -7,7 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const TARGET = process.env.npm_lifecycle_event
 process.env.BABEL_ENV = TARGET
-process.env.PORT = 3001
+process.env.PORT = 4001
 process.env.HOST = 'localhost'
 
 const PATHS = {
@@ -29,11 +29,6 @@ const common = {
         enforce: 'pre',
         test: /\.js$/,
         loader: 'eslint',
-        include: PATHS.app
-      },
-      {
-        test: /\.css$/,
-        loaders: ['style', 'css'],
         include: PATHS.app
       },
       {

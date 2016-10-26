@@ -1,24 +1,40 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { style } from './style'
+import Paper from 'material-ui/Paper'
+import { paper } from '../theme'
 import { actionHub, services } from '../../loader'
 import * as db from './db'
+import { parse } from './parser'
+import { Components } from '@gp-technical/stack-redux-components'
+import Loader from 'react-loader-advanced'
+
+let total = null
+const columns = ['index', 'date', 'description', 'amount', 'balance']
 
 class container extends React.Component {
+  onFileSelected = async e => {
+    await parse(e.target.files[0])
+    this.props.set(db.transactions())
+  }
 
-  onFileSelected = e => {
-    db.save(e.target.files[0])
-    this.props.add(db.select())
+  onClear = e => {
+    db.clear()
+    this.props.set(db.transactions())
   }
 
   render () {
     const {transactions} = this.props
-    console.info('transactions', transactions)
     return (
-      <div style={style.box}>
+      <Paper style={paper} zDepth={1}>
         <h2>Transactions</h2>
+        <button onClick={this.onClear}>
+          Clear
+        </button>
         <input type='file' accept='.csv' onChange={this.onFileSelected} />
-      </div>
+        <Loader show={!transactions} message={'loading'} hideContentOnLoad={true}>
+          <Components.Table rows={transactions} columns={columns} onDelete={this.onDeleteOne} />
+        </Loader>
+      </Paper>
     )
   }
 }
@@ -28,7 +44,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  add: (transactions) => dispatch(actionHub.TRANSACTIONS_ADD(transactions))
+  set: (transactions) => dispatch(actionHub.TRANSACTIONS_SET(transactions))
 })
 
 const component = connect(mapStateToProps, mapDispatchToProps)(container)
