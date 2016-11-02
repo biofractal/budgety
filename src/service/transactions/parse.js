@@ -1,9 +1,10 @@
-import { helpers } from '@gp-technical/stack-redux-components'
-import * as db from './db'
+import { helper } from '@gp-technical/stack-redux-components'
+import { db } from '../../loader'
 import moment from 'moment'
 
 const keyMaps = {
   'date': ['Date', 'Transaction Date'],
+  'type': ['Type', 'Transaction Type'],
   'description': ['Description', 'Transaction Description'],
   'amount': ['Amount', 'Debit Amount', 'Credit Amount'],
   'balance': ['Balance']
@@ -13,11 +14,11 @@ const getOwner = (content) => {
   return (Object.keys(content[0])[0] === 'Date') ? 'jonny' : 'kay'
 }
 
-const normalise = (content) => {
+const normalise = (contents) => {
   const transactions = db.transactions()
-  for (var i = 0; i < content.length; i++) {
-    const row = content[i]
-    const nrow = {index: i + 1}
+  for (var i = 0; i < contents.length; i++) {
+    const row = contents[i]
+    const nrow = {owner: getOwner(contents), type: '*'}
     for (let rowKey in row) {
       for (let mapKey in keyMaps) {
         if (keyMaps[mapKey].includes(rowKey)) {
@@ -46,12 +47,11 @@ const normalise = (content) => {
 }
 
 const parse = async file => {
-  const contents = await helpers.csvParse(file)
-  const owner = getOwner(contents)
+  const contents = await helper.csvParse(file)
   const transactions = normalise(contents)
-  const balance = transactions[transactions.length - 1].balance
-  db.balance(balance, owner)
-  console.info('total', db.balance())
+  transactions.sort((t1, t2) => {
+    return new Date(t2.date).getTime() - new Date(t1.date).getTime()
+  })
   db.transactions(transactions)
   return transactions
 }

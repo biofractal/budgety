@@ -22,9 +22,6 @@ const muiTheme = getMuiTheme({
   },
   appBar: {
     height: 50
-  },
-  toolbar: {
-    backgroundColor: white
   }
 })
 
