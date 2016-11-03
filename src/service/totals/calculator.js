@@ -26,4 +26,5 @@ const getTotals = () => {
   return totals
 }
 
-export { getTotals }
+export default {
+  getTotals}

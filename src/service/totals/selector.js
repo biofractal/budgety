@@ -1,6 +1,7 @@
-import { name } from './feature'
+import { name } from './name'
 
-const getAll = (state) => {
+const get = (state) => {
   return state[name]
 }
-export { getAll }
+export default {
+  get}

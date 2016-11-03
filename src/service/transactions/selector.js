@@ -1,15 +1,18 @@
-import { name } from './feature'
+import { name } from './name'
 
-const getAll = (state) => {
+const get = (state) => {
   return state[name]
 }
 
 const getFilter = (state) => {
-  return getAll(state).filter
+  return get(state).filter
 }
 
 const getTransactions = (state) => {
-  return getAll(state).transactions
+  return get(state).transactions
 }
 
-export { getAll, getFilter, getTransactions }
+export default {
+  get,
+  getFilter,
+  getTransactions}

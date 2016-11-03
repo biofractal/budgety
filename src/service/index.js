@@ -1,4 +1,4 @@
-import * as totals from './totals'
-import * as transactions from './transactions'
+import totals from './totals'
+import transactions from './transactions'
 
 export { totals, transactions }

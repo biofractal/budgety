@@ -5,11 +5,11 @@ import { Components, helper } from '@gp-technical/stack-redux-components'
 import { List, ListItem } from 'material-ui/List'
 import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar'
 
-class container extends React.Component {
+class component extends React.Component {
   render () {
     const {totals} = this.props
     if (!totals) return null
-    console.info('totals', totals)
+
     const items = []
     for (var key in totals) {
       items.push(<ListItem key={key} primaryText={key} secondaryText={helper.format.asSterling(totals[key])} />)
@@ -28,9 +28,7 @@ class container extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  totals: services.totals.selector.getAll(state)
+  totals: services.totals.selector.get(state)
 })
 
-const component = connect(mapStateToProps)(container)
-
-export { component }
+export default connect(mapStateToProps)(component)

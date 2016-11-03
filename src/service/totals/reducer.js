@@ -1,4 +1,4 @@
-import { calculator } from './'
+import calculator from './calculator'
 
 const reducer = function (state = {}, action) {
   const {type, types, data} = action

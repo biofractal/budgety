@@ -1,4 +1,4 @@
-import { component as totals } from './totals/component'
-import { component as transactions } from './transactions/component'
+import totals from './totals'
+import transactions from './transactions'
 
 export { totals, transactions }

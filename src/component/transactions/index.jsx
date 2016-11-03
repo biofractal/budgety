@@ -7,8 +7,7 @@ import FlatButton from 'material-ui/FlatButton'
 import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar'
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 
-class container extends React.Component {
-  state = {filter: 'all'}
+class component extends React.Component {
 
   onFilterChanged = (e, value) => {
     this.props.setFilter(value)
@@ -85,6 +84,4 @@ const mapDispatchToProps = (dispatch) => ({
 
 })
 
-const component = connect(mapStateToProps, mapDispatchToProps)(container)
-
-export { component }
+export default connect(mapStateToProps, mapDispatchToProps)(component)
