@@ -1,7 +1,5 @@
 import { helper } from '@gp-technical/stack-redux-components'
-import { db } from '../../loader'
 import moment from 'moment'
-
 const keyMaps = {
   'date': ['Date', 'Transaction Date'],
   'type': ['Type', 'Transaction Type'],
@@ -15,7 +13,7 @@ const getOwner = (content) => {
 }
 
 const normalise = (contents) => {
-  const transactions = db.transactions()
+  const results = []
   for (var i = 0; i < contents.length; i++) {
     const row = contents[i]
     const nrow = {owner: getOwner(contents), type: '*'}
@@ -41,19 +39,18 @@ const normalise = (contents) => {
         }
       }
     }
-    transactions.push(nrow)
+    results.push(nrow)
   }
-  return transactions
+  return results
 }
 
-const parse = async file => {
-  const contents = await helper.csvParse(file)
-  const transactions = normalise(contents)
-  transactions.sort((t1, t2) => {
-    return new Date(t2.date).getTime() - new Date(t1.date).getTime()
-  })
-  db.transactions(transactions)
+const parse = async (file, transactions) => {
+  const parsed = await helper.csvParse(file)
+  const normalised = normalise(parsed)
+  const deduplicated = normalised.filter(t1 => !transactions.find(t2 => JSON.stringify(t1) === JSON.stringify(t2)))
   return transactions
+    .concat(deduplicated)
+    .sort((t1, t2) => t2.date.isAfter(t1.date))
 }
 
-export { parse }
+export default parse

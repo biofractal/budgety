@@ -1,12 +1,11 @@
-const reducer = function (state = {transactions: []}, action) {
+const reducer = function (state = {transactions: [], filter: ''}, action) {
   const {type, types, data} = action
-
   switch (type) {
-    case types.transactions_init: {
-      return data
-    }
-    case types.transactionsLoad: {
+    case types.transactionsParse: {
       return {...state, transactions: data}
+    }
+    case types.transactionsRemoveAll: {
+      return {...state, transactions: []}
     }
     case types.transactionsSetFilter: {
       return {...state, filter: data}

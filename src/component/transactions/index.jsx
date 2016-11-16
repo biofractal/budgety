@@ -1,26 +1,34 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { actionHub, services, db } from '../../loader'
+import { actionHub, services } from '../../loader'
 import { Components, helper } from '@gp-technical/stack-redux-components'
 import FlatButton from 'material-ui/FlatButton'
+import TextField from 'material-ui/TextField'
 import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar'
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
+const style = {
+  filter: {
+    marginTop: 16,
+    width: 120
+  }
+}
+class component extends React.PureComponent {
 
-class component extends React.Component {
-
-  onFilterChanged = (e, value) => {
-    this.props.setFilter(value)
+  onFilterChanged = (e) => {
+    this.props.setFilter(e.target.value)
   }
 
-  onFileSelected = async e => {
-    await services.transactions.parse(e.target.files[0])
-    this.props.load(db.transactions())
+  onFilterClear = () => {
+    this.props.setFilter('')
   }
 
-  onClear = e => {
-    db.clear()
-    this.props.load(db.transactions())
+  onFileSelected = e => {
+    this.props.parse(e.target.files[0])
+  }
+
+  onRemoveAll = () => {
+    this.props.removeAll()
   }
 
   columns = {
@@ -38,33 +46,29 @@ class component extends React.Component {
     }
   }
 
+  getFiltered = (transactions, filter) => {
+    return transactions.filter(t => filter
+      .split(',')
+      .map(v => v.trim())
+      .find(f => t.description.toLowerCase().indexOf(f.toLowerCase()) !== -1 || t.owner.toLowerCase().indexOf(f.toLowerCase()) !== -1))
+  }
+
   render () {
     let {transactions, filter} = this.props
-
-    if (filter && filter !== 'all') {
-      transactions = transactions.filter(t => t.owner === filter)
-    }
+    if (filter) transactions = this.getFiltered(transactions, filter)
 
     return (
       <Components.Box>
         <Toolbar>
           <ToolbarTitle text='Account Transactions' />
-          <ToolbarGroup>
-            <RadioButtonGroup
-              name='owner'
-              style={{display: 'flex'}}
-              defaultSelected='all'
-              onChange={this.onFilterChanged}>
-              <RadioButton value='all' label='all' style={{marginTop: 16}} />
-              <RadioButton value='jonny' label='Jonny' style={{marginTop: 16}} />
-              <RadioButton value='kay' label='Kay' style={{marginTop: 16}} />
-            </RadioButtonGroup>
+          <ToolbarGroup firstChild={true}>
+            <TextField name='filter' value={filter} onChange={this.onFilterChanged} />
+            <FlatButton primary={true} label='Show All' onClick={this.onFilterClear} />
           </ToolbarGroup>
-          <ToolbarGroup>
-            <ToolbarSeparator />
+          <ToolbarGroup lastChild={true}>
             <Components.FileUpload label='Choose File' onFileSelected={this.onFileSelected} />
             <ToolbarSeparator />
-            <FlatButton primary={true} label='Clear' onClick={this.onClear} />
+            <FlatButton primary={true} label='Remove All' onClick={this.onRemoveAll} />
           </ToolbarGroup>
         </Toolbar>
         <Components.ObjectTable rows={transactions} columns={this.columns} onDelete={this.onDeleteOne} />
@@ -79,9 +83,9 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  load: (transactions) => dispatch(actionHub.TRANSACTIONS_LOAD(transactions)),
+  parse: (file) => dispatch(actionHub.TRANSACTIONS_PARSE(file)),
+  removeAll: () => dispatch(actionHub.TRANSACTIONS_REMOVE_ALL()),
   setFilter: (filter) => dispatch(actionHub.TRANSACTIONS_SET_FILTER(filter))
-
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(component)
