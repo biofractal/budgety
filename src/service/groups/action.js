@@ -3,7 +3,7 @@ import uuid from 'uuid'
 import { makeActions, makeTypes } from '@gp-technical/stack-redux-app'
 import { actionHub } from '../../loader'
 
-const types = makeTypes(name, ['deleteOne', 'create', 'update', 'setFilter'])
+const types = makeTypes(name, ['deleteOne', 'create', 'update', 'setFilter', 'restore'])
 const actions = makeActions(types)
 
 actions.groupsCreate = group => {

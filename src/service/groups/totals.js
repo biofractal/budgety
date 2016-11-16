@@ -1,6 +1,11 @@
 const calculate = (groups, transactions) => {
   const result = []
-  const noMatch = {id: 0, label: 'Not Matched', matches: ['*'], amount: 0}
+  let noMatch = groups.find(g => g.id === 0)
+  if (!noMatch) {
+    noMatch = {id: 0, label: 'Not Matched', matches: ['*'], amount: 0}
+    result.push(noMatch)
+  }
+  noMatch.amount = 0
   if (groups.length === 0) {
     transactions.forEach(({amount}) => {
       noMatch.amount += Math.abs(amount)
@@ -20,7 +25,6 @@ const calculate = (groups, transactions) => {
     })
   }
 
-  result.push(noMatch)
   result.sort((g1, g2) => {
     return g1.amount < g2.amount
   })

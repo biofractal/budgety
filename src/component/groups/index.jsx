@@ -5,9 +5,23 @@ import { Components, helper } from '@gp-technical/stack-redux-components'
 import TextField from 'material-ui/TextField'
 import FilterListIcon from 'material-ui/svg-icons/content/filter-list'
 import RaisedButton from 'material-ui/RaisedButton'
-import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar'
+import FlatButton from 'material-ui/FlatButton'
+import { Toolbar, ToolbarTitle, ToolbarGroup } from 'material-ui/Toolbar'
 
 class component extends React.PureComponent {
+  state = {
+    label: '',
+    matches: ''
+  }
+  onBackup = () => {
+    const {groups} = this.props
+    helper.clientFile.save('budgety-groups.txt', groups)
+  }
+
+  onRestore = async (e) => {
+    const groups = await helper.clientFile.load(e.target.files[0])
+    this.props.restore(groups)
+  }
 
   onChangeLabel = (e) => {
     this.setState({
@@ -24,6 +38,10 @@ class component extends React.PureComponent {
   onCreate = () => {
     const {label, matches} = this.state
     this.props.create({label, matches})
+    this.setState({
+      label: '',
+      matches: ''
+    })
   }
 
   onChange = (row, key, value) => {
@@ -61,14 +79,27 @@ class component extends React.PureComponent {
   render () {
     const {groups} = this.props
     if (!groups) return null
+
     return (
       <Components.Box>
         <Toolbar>
           <ToolbarTitle text='Groups' />
+          <ToolbarGroup firstChild={true}>
+            <FlatButton primary={true} label='Backup' onClick={this.onBackup} />
+            <Components.FileUpload label='Restore' onFileSelected={this.onRestore} />
+          </ToolbarGroup>
         </Toolbar>
         <div style={{textAlign: 'center'}}>
-          <TextField style={{width: 200, marginRight: 20}} floatingLabelText='label' onChange={this.onChangeLabel} />
-          <TextField style={{width: 500, marginRight: 20}} floatingLabelText='matches' onChange={this.onChangeMatches} />
+          <TextField
+            style={{width: 200, marginRight: 20}}
+            floatingLabelText='label'
+            onChange={this.onChangeLabel}
+            value={this.state.label} />
+          <TextField
+            style={{width: 500, marginRight: 20}}
+            floatingLabelText='matches'
+            onChange={this.onChangeMatches}
+            value={this.state.matches} />
           <RaisedButton primary={true} label='Create' onClick={this.onCreate} />
         </div>
         <Components.ObjectTable
@@ -89,6 +120,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   create: (item) => dispatch(actionHub.GROUPS_CREATE(item)),
+  restore: (groups) => dispatch(actionHub.GROUPS_RESTORE(groups)),
   setFilter: (matches) => dispatch(actionHub.GROUPS_SET_FILTER(matches)),
   update: (id, key, value) => dispatch(actionHub.GROUPS_UPDATE({id, key, value})),
   deleteOne: (id) => dispatch(actionHub.GROUPS_DELETE_ONE(id))

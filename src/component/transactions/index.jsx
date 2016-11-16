@@ -6,13 +6,7 @@ import { Components, helper } from '@gp-technical/stack-redux-components'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar'
-import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
-const style = {
-  filter: {
-    marginTop: 16,
-    width: 120
-  }
-}
+
 class component extends React.PureComponent {
 
   onFilterChanged = (e) => {

@@ -6,6 +6,8 @@ const reducer = function (state = {groups: []}, action) {
       groups = [...state.groups]
       groups.push(data)
       return {...state, groups}
+    case types.groupsRestore:
+      return {...state, groups: data}
     case types.groupsUpdate:
       let {id, key, value} = data
       groups = state.groups.map(group => {
