@@ -4,8 +4,7 @@ const keyMaps = {
   'date': ['Date', 'Transaction Date'],
   'type': ['Type', 'Transaction Type'],
   'description': ['Description', 'Transaction Description'],
-  'amount': ['Amount', 'Debit Amount', 'Credit Amount'],
-  'balance': ['Balance']
+  'amount': ['Amount', 'Debit Amount', 'Credit Amount']
 }
 
 const getOwner = (content) => {
@@ -22,7 +21,6 @@ const normalise = (contents) => {
         if (keyMaps[mapKey].includes(rowKey)) {
           switch (mapKey) {
             case 'amount':
-            case 'balance':
               let val = parseFloat(row[rowKey])
               if (isNaN(val)) continue
               if (rowKey === 'Debit Amount') {

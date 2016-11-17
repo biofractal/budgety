@@ -16,9 +16,9 @@ actions.groupsCreate = group => {
   }
 }
 
-actions.groupsSetFilter = filter => {
+actions.groupsSetFilter = group => {
   return (dispatch, getState) => {
-    dispatch(actionHub.TRANSACTIONS_SET_FILTER(filter))
+    dispatch(actionHub.TRANSACTIONS_SET_GROUP_FILTER(group))
     dispatch(actionHub.APP_TABS_SELECT('transactions'))
   }
 }

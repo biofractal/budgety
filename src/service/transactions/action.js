@@ -3,7 +3,7 @@ import parse from './parse'
 import selector from './selector'
 import { makeActions, makeTypes } from '@gp-technical/stack-redux-app'
 
-const types = makeTypes(name, ['parse', 'removeAll', 'setFilter'])
+const types = makeTypes(name, ['parse', 'removeAll', 'setGroupFilter', 'setTextFilter', 'showAll'])
 const actions = makeActions(types)
 
 actions.transactionsParse = file => {

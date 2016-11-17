@@ -9,12 +9,12 @@ import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-
 
 class component extends React.PureComponent {
 
-  onFilterChanged = (e) => {
-    this.props.setFilter(e.target.value)
+  onTextFilterChanged = (e) => {
+    this.props.setTextFilter(e.target.value)
   }
 
-  onFilterClear = () => {
-    this.props.setFilter('')
+  onShowAll = () => {
+    this.props.showAll()
   }
 
   onFileSelected = e => {
@@ -34,30 +34,38 @@ class component extends React.PureComponent {
     description: 'description',
     amount: {
       format: ({amount}) => helper.format.asSterling(amount)
-    },
-    balance: {
-      format: ({balance}) => helper.format.asSterling(balance)
     }
   }
 
-  getFiltered = (transactions, filter) => {
-    return transactions.filter(t => filter
-      .split(',')
-      .map(v => v.trim())
-      .find(f => t.description.toLowerCase().indexOf(f.toLowerCase()) !== -1 || t.owner.toLowerCase().indexOf(f.toLowerCase()) !== -1))
+  getFiltered = (transactions, {group, text}) => {
+    let filtered = [...transactions]
+    if (group) {
+      const {id} = group
+      filtered = filtered.filter(t => t.groups.includes(id))
+    }
+    if (text) {
+      text = text.toLowerCase()
+      filtered = filtered.filter(t => t.description.toLowerCase().indexOf(text) !== -1 ||
+        t.owner.toLowerCase().indexOf(text) !== -1 ||
+        t.amount.toLowerCase().indexOf(text) !== -1
+      )
+    }
+    return filtered
   }
 
   render () {
     let {transactions, filter} = this.props
-    if (filter) transactions = this.getFiltered(transactions, filter)
+    if (filter) {
+      transactions = this.getFiltered(transactions, filter)
+    }
 
     return (
       <Components.Box>
         <Toolbar>
           <ToolbarTitle text='Account Transactions' />
           <ToolbarGroup firstChild={true}>
-            <TextField name='filter' value={filter} onChange={this.onFilterChanged} />
-            <FlatButton primary={true} label='Show All' onClick={this.onFilterClear} />
+            <TextField name='filter' value={filter.text} onChange={this.onTextFilterChanged} />
+            <FlatButton primary={true} label='Show All' onClick={this.onShowAll} />
           </ToolbarGroup>
           <ToolbarGroup lastChild={true}>
             <Components.FileUpload label='Choose File' onFileSelected={this.onFileSelected} />
@@ -79,7 +87,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   parse: (file) => dispatch(actionHub.TRANSACTIONS_PARSE(file)),
   removeAll: () => dispatch(actionHub.TRANSACTIONS_REMOVE_ALL()),
-  setFilter: (filter) => dispatch(actionHub.TRANSACTIONS_SET_FILTER(filter))
+  setTextFilter: (text) => dispatch(actionHub.TRANSACTIONS_SET_TEXT_FILTER(text)),
+  showAll: () => dispatch(actionHub.TRANSACTIONS_SHOW_ALL())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(component)

@@ -48,8 +48,8 @@ class component extends React.PureComponent {
     this.props.update(row.id, key, value)
   }
 
-  onFilter = ({matches}) => {
-    this.props.setFilter(matches.join(','))
+  onFilter = (group) => {
+    this.props.setFilter(group)
   }
 
   onDelete = ({id}) => {
@@ -121,7 +121,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   create: (item) => dispatch(actionHub.GROUPS_CREATE(item)),
   restore: (groups) => dispatch(actionHub.GROUPS_RESTORE(groups)),
-  setFilter: (matches) => dispatch(actionHub.GROUPS_SET_FILTER(matches)),
+  setFilter: (group) => dispatch(actionHub.GROUPS_SET_FILTER(group)),
   update: (id, key, value) => dispatch(actionHub.GROUPS_UPDATE({id, key, value})),
   deleteOne: (id) => dispatch(actionHub.GROUPS_DELETE_ONE(id))
 })
